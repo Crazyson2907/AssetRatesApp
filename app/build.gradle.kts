@@ -90,4 +90,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation( libs.androidx.room.ktx)
 
+    //Hilt
+    implementation(libs.androidx.hilt.navigation.compose)
+
 }
