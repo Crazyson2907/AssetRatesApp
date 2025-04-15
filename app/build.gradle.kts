@@ -28,6 +28,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled = true
 
         val exchangeRateApiKey: String = localProperties.getProperty("EXCHANGE_RATE_API_KEY") ?: ""
         buildConfigField("String", "EXCHANGE_RATE_API_KEY", "\"$exchangeRateApiKey\"")
@@ -84,13 +85,11 @@ dependencies {
     //Dagger
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Room components
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation( libs.androidx.room.ktx)
-
-    //Hilt
-    implementation(libs.androidx.hilt.navigation.compose)
 
 }
