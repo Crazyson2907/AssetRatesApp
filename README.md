@@ -32,13 +32,16 @@ It displays **live exchange rates** for a list of user-selected fiat or crypto c
 ## 📸 Screenshots
 
 ### Home Screen
-<img src="screenshots/home_screen.png" width="583"/>
+<img src="screenshots/home_screen.png" width="300"/>
 
 ### Add Asset Screen
-<img src="screenshots/add_asset.png" width="575"/>
+<img src="screenshots/add_asset.png" width="300"/>
 
-### API Key Error
-<img src="screenshots/no_assets.png" width="589"/>
+### No data
+<img src="screenshots/no_assets.png" width="300"/>
+
+### API key expired
+<img src="screenshots/api_error.png" width="300"/>
 
 
 
