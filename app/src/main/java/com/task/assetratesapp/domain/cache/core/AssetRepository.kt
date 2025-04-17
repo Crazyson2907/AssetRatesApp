@@ -5,4 +5,5 @@ interface AssetRepository {
     suspend fun addAsset(code: String)
     suspend fun removeAsset(code: String)
     suspend fun fetchRate(assetCode: String): Double?
+    suspend fun getSupportedCurrencies(): Map<String, String>
 }

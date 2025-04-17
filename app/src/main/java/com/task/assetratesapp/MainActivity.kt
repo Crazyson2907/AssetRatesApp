@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.task.assetratesapp.presentation.addAssets.AddAssetScreen
 import com.task.assetratesapp.presentation.assetList.AssetListIntent
-import com.task.assetratesapp.presentation.assetList.AssetListScreen
+import com.task.assetratesapp.presentation.assetList.components.AssetListScreen
 import com.task.assetratesapp.presentation.assetList.AssetViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,6 +36,7 @@ class MainActivity : ComponentActivity() {
                 }
                 "add" -> {
                     AddAssetScreen(
+                        viewModel = viewModel,
                         onAssetSelected = { assetCode ->
                             viewModel.handleIntent(AssetListIntent.AddAsset(assetCode))
                             currentScreen = "home"

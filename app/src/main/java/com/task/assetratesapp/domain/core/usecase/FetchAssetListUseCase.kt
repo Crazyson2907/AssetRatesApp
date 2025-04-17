@@ -6,22 +6,26 @@ import com.task.assetratesapp.domain.network.usecase.FetchAssetsFromApiUseCase
 import com.task.assetratesapp.util.Response
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
 interface FetchAssetsListUseCase {
     suspend fun execute(): Flow<Response<List<Asset>>>
 
-    class Base(
+    class Base @Inject constructor(
         private val fetchAssetsFromApiUseCase: FetchAssetsFromApiUseCase,
         private val getAssetsFromCacheUseCase: GetAssetsFromCacheUseCase
     ) : FetchAssetsListUseCase {
-        override suspend fun execute(): Flow<Response<List<Asset>>> {
-            val cachedAssets = getAssetsFromCacheUseCase.execute()
-            return if (cachedAssets.isEmpty()) {
-                // If cache is empty, get fresh data from API.
-                fetchAssetsFromApiUseCase.execute()
+        override suspend fun execute(): Flow<Response<List<Asset>>> = flow {
+            emit(Response.loading(null))
+
+            val codes = getAssetsFromCacheUseCase.execute()
+            if (codes.isEmpty()) {
+                emit(Response.success(emptyList()))
             } else {
-                // Otherwise, simply emit the cached data wrapped in a success Resource.
-                flow { emit(Response.success(cachedAssets)) }
+                // always fetch from API
+                fetchAssetsFromApiUseCase.execute().collect { apiResource ->
+                    emit(apiResource)
+                }
             }
         }
     }

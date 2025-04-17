@@ -10,9 +10,11 @@ import com.task.assetratesapp.domain.cache.usecase.GetAssetsFromCacheUseCase
 import com.task.assetratesapp.domain.core.usecase.AddAssetUseCase
 import com.task.assetratesapp.domain.core.usecase.AssetUseCases
 import com.task.assetratesapp.domain.core.usecase.FetchAssetsListUseCase
+import com.task.assetratesapp.domain.core.usecase.InitializeAssetsUseCase
 import com.task.assetratesapp.domain.core.usecase.RemoveAssetUseCase
 import com.task.assetratesapp.domain.network.core.ExchangeRatesApiService
 import com.task.assetratesapp.domain.network.usecase.FetchAssetsFromApiUseCase
+import com.task.assetratesapp.domain.network.usecase.GetSupportedCurrenciesUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -55,14 +57,13 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAssetRepository(
-        @ApplicationContext appContext: Context,
         api: ExchangeRatesApiService,
         database: AssetDatabase
-    ): AssetRepository = AssetRepositoryImpl(appContext, api, database)
+    ): AssetRepository = AssetRepositoryImpl(api, database)
 
     @Provides
     @Singleton
-    fun provideAssetUseCases(repository: AssetRepository): AssetUseCases = AssetUseCases(
+    fun provideAssetUseCases(repository: AssetRepository, @ApplicationContext appContext: Context): AssetUseCases = AssetUseCases(
         fetchAssetsListUseCase = FetchAssetsListUseCase.Base(
             fetchAssetsFromApiUseCase = FetchAssetsFromApiUseCase(repository),
             getAssetsFromCacheUseCase = GetAssetsFromCacheUseCase(repository)
@@ -70,6 +71,8 @@ object AppModule {
         addAssetUseCase = AddAssetUseCase(repository),
         removeAssetUseCase = RemoveAssetUseCase(repository),
         getAssetsFromCacheUseCase = GetAssetsFromCacheUseCase(repository),
-        fetchAssetsFromApiUseCase = FetchAssetsFromApiUseCase(repository)
+        fetchAssetsFromApiUseCase = FetchAssetsFromApiUseCase(repository),
+        initializeAssetsUseCase = InitializeAssetsUseCase(repository, appContext),
+        getSupportedCurrenciesUseCase = GetSupportedCurrenciesUseCase(repository)
     )
 }
