@@ -29,6 +29,19 @@ It displays **live exchange rates** for a list of user-selected fiat or crypto c
 
 ---
 
+## 📸 Screenshots
+
+### Home Screen
+<img src="screenshots/home_screen.png" width="583"/>
+
+### Add Asset Screen
+<img src="screenshots/add_asset.png" width="575"/>
+
+### API Key Error
+<img src="screenshots/no_assets.png" width="589"/>
+
+
+
 ## 🧪 Coming Soon / Future Work
 
 - UI tests with `androidx.compose.ui.test`
@@ -37,21 +50,6 @@ It displays **live exchange rates** for a list of user-selected fiat or crypto c
 - Multi-currency conversions
 
 ---
-
-## Folder structure
-
-app/
-├── data/
-│   ├── network/
-│   ├── cache/
-│   └── model/
-├── domain/
-│   ├── model/
-│   └── usecase/
-├── presentation/
-│   ├── assetList/
-│   └── addAsset/
-└── di/
 
 ## 🔐 API Key Setup
 
