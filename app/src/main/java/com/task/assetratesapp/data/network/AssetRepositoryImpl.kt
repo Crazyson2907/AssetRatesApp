@@ -6,6 +6,7 @@ import com.task.assetratesapp.data.cache.AssetDatabase
 import com.task.assetratesapp.domain.cache.core.AssetRepository
 import com.task.assetratesapp.domain.cache.entities.AssetEntity
 import com.task.assetratesapp.domain.network.core.ExchangeRatesApiService
+import com.task.assetratesapp.util.ExpiredApiKeyException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -29,16 +30,26 @@ class AssetRepositoryImpl @Inject constructor(
 
     override suspend fun fetchRate(assetCode: String): Double? = withContext(Dispatchers.IO) {
         Log.d(TAG, "Fetching rate for asset: $assetCode")
-        return@withContext try {
-            // The key for the quote should be "USD<assetCode>"
+        try {
             val response = api.getLatestRates(base = "USD", symbols = assetCode)
+
+            if (!response.success) {
+                Log.e(TAG, "API Error: ${response.error?.type} - ${response.error?.info}")
+
+                if (response.error?.code == 101 || response.error?.code == 104) {
+                    throw ExpiredApiKeyException(response.error?.info ?: "API key expired")
+                }
+
+                return@withContext null
+            }
+
             val key = "USD$assetCode"
-            val rate = response.quotes[key]
-            Log.d(TAG, "Received rate for $assetCode: $rate")
-            rate
+            return@withContext response.quotes?.get(key)
+        } catch (e: ExpiredApiKeyException) {
+            throw e
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching rate for $assetCode", e)
-            null
+            Log.e(TAG, "General error fetching rate for $assetCode", e)
+            return@withContext null
         }
     }
 

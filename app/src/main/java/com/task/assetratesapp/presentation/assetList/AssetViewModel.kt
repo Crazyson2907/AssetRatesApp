@@ -65,10 +65,12 @@ class AssetViewModel @Inject constructor(
                         isLoading = false,
                         error = null
                     )
+
                     Status.ERROR -> it.copy(
-                        error = result.message,
+                        error = result.message ?: "Something went wrong",
                         isLoading = false
                     )
+
                     Status.LOADING -> if (showLoading) it.copy(isLoading = true) else it
                 }
             }
@@ -85,10 +87,12 @@ class AssetViewModel @Inject constructor(
                         assets = result.data.orEmpty(),
                         isRefreshing = false
                     )
+
                     Status.ERROR -> it.copy(
                         error = result.message,
                         isRefreshing = false
                     )
+
                     else -> it
                 }
             }

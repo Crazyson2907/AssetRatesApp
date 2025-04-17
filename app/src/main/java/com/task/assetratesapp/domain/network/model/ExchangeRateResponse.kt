@@ -8,6 +8,13 @@ data class ExchangeRateResponse(
     val privacy: String,
     val timestamp: Long,
     val source: String,
+    val error: ApiError? = null,
     // The API returns rates under the "quotes" field.
     @SerializedName("quotes") val quotes: Map<String, Double>
+)
+
+data class ApiError(
+    val code: Int,
+    val type: String,
+    val info: String
 )

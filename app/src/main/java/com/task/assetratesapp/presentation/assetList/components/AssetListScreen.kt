@@ -62,17 +62,22 @@ fun AssetListScreen(
                 .padding(paddingValues)
         ) {
             when {
+                assetListState.error != null -> {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(horizontal = 24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("⚠️ API Key Error", style = MaterialTheme.typography.titleMedium)
+                        Spacer(Modifier.height(8.dp))
+                        Text(assetListState.error ?: "Unknown error", style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
                 assetListState.isLoading -> {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
-                assetListState.error != null -> {
-                    Text(
-                        text = assetListState.error ?: "An unknown error occurred",
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
                 assetListState.assets.isEmpty() -> {
-                    // Placeholder for no assets
                     Column(
                         Modifier.align(Alignment.Center),
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -91,7 +96,13 @@ fun AssetListScreen(
                         items(assetListState.assets) { asset ->
                             AssetListItem(
                                 asset = asset.toPresentation(),
-                                onRemove = { viewModel.handleIntent(AssetListIntent.RemoveAsset(asset.code)) }
+                                onRemove = {
+                                    viewModel.handleIntent(
+                                        AssetListIntent.RemoveAsset(
+                                            asset.code
+                                        )
+                                    )
+                                }
                             )
                         }
                     }
